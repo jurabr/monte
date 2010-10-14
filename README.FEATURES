@@ -1,0 +1,50 @@
+What we need/want/dream about:
+==============================
+
+Symbols:
+
+(A) -> (E) ... level of importance (A=necessary, E=dream)
+[X] ... status (planned -> in progress -> testing -> done)
+
+
+
+INPUT:
+
+- variable number of simulations (1...10mil. at least) (A) [done]
+- automatic control of number of simulations (maybe controlled 
+  by variational coefficient) (E) [planned]
+- more possibilities of input types:
+  - histograms (A) [done]
+  - random functions (C) [planned]
+- correlations of input variables (B) [testing]
+- parametric simulations (E) [planned]
+
+  
+SIMULATIONS:
+
+- support of at least 10 millions (A) [done]
+- (optional) indication of current sim. number (D) [in progress]
+- (optional) estimation of coputational time - based on comp. time
+  of 1 - n first simulations (B) [done]
+- parallel execution of computations - MPI through SPRNG (A) [testing]
+- (optional) saving of realizations (A) [done]
+- execution of dynamicaly loaded libraries (A) [done]
+- build-in calculations (E) [planned]
+- execution of Python code through embedded interpreter (E) [planned]
+- execution of C code through libtcc (E) [planned]
+
+
+OUTPUT:
+
+- controllable level of output (A) [done]
+- output of basic statistic variables (A) [testing]
+- output of histogram(s) (A) [testing]
+- output of log (A) [done]
+- computation of correlations between output variables (B) [testing]
+- quantiles (B) [planned]
+
+
+OTHER:
+- Mac OS X version - *.dynlib loading etc. (C) [done]
+- Windows version - *.DLL loading etc. (E) [planned]
+- simple GUI - probably Tcl/Tk (E) [testing]

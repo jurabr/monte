@@ -1,0 +1,271 @@
+### Sat Oct  9 21:44:10 CEST 2010
+
+  + Win32 DLL support (with MINGW)
+
+
+### Fri Sep 24 20:23:59 CEST 2010
+
+  - output types fixed in correl.c
+
+
+### Sun Sep  5 19:00:19 CEST 2010
+
+  + file to write reliability of failure (-fpf FILE)
+  + more descriptive I/O error informations
+
+
+### Sat Aug 28 14:41:27 CEST 2010
+
+  + simpler prefix structure for directories (monte.tcl)
+  + command line can be shown (monte.tcl)
+  + no executable script "runmonte" is needed (monte.tcl)
+  - non-working scrollbars fixed (monte.tcl)
+
+
+### Fri Aug 13 18:22:59 CEST 2010
+
+  - MPI compilation bugs (once more)
+
+
+### Sat Nov 17 14:56:30 CET 2007
+
+  + "copy" random variable added (because of uFEM)
+
+
+### Tue Oct 24 22:27:57 CEST 2006
+
+  + "verbose mode" command line switch added to molitest (-v)
+
+
+### Tue Sep 26 23:51:34 CEST 2006
+
+  + uFEM can be used as a library solver (hard to use)
+
+  - field lenghts fixed in simul.c and molitest.c
+  - combined output of input and input variables fixed
+
+  
+### Wed Aug 23 23:07:37 CEST 2006
+
+  - new order of calling of library functions (type 2): init first 
+
+
+### Mon Aug 14 18:14:22 CEST 2006
+
+  + realizations of input variables can also be saved (if applicable)
+  + 8991 lines of C code (including 2543 lines of uFEM stuff)
+
+
+### Sun Aug  6 18:59:48 CEST 2006
+
+  + Tcl: keyboard accelerators for menu
+  + 1853 lines of code of Tcl code
+
+
+### Sat Aug  5 20:54:40 CEST 2006
+
+  + computation results can be obtained from stdin of file 
+    (allows full pipe operations)
+  + initializacion for Knuth random generator added
+  + initialization of randomizer can be turned off (for testing)
+  + 8966 lines of C code (including 2543 lines of uFEM stuff)
+
+  - invalid parameter in corr_unpack fixed (out of field bug)
+  - invalid Macintosh file type fixed (again)
+
+
+### Sun Jul 30 14:46:22 CEST 2006
+
+  + inialization with random seed for non-SPRNG generators
+
+
+### Fri Jul 28 18:11:27 CEST 2006
+
+  + correlations of results (including input data) - Pearson coeff.
+  + inialization with random seed added (SPRNG only)
+  + 8884 lines of C code (including 2543 lines of uFEM stuff)
+  + Tcl: monte.tcl now can read and write (but not edit) correlation data
+  + 1844 lines of Tcl code
+
+
+### Thu Jul 27 17:07:18 CEST 2006
+
+  + correlations (well, they are done in a very simple way)
+  + program for computation of corrleation matrix (through
+    Pearson's coefficients) added
+  + 8633 lines of C code  (including 2543 lines of uFEM stuff)
+
+  - fixed incorrect computation of dispersion and std. deviation
+
+
+### Wed Jul 26 00:06:44 CEST 2006
+
+  + Cholesky decomposition added
+  
+
+### Sun Jul 23 18:40:05 CEST 2006
+
+  + program messages are now send to stdout by default
+  + correlation calling added to "molitest"
+
+
+### Thu Jul 20 23:31:07 CEST 2006
+
+  + instruction for Mac OS X added to the makefile
+
+  
+### Thu Jul 20 19:06:37 CEST 2006
+
+  + computation of eigenvalues and eigenvectors added
+  + math libraries from the uFEM included
+  + 7902 lines of C code (including 2622 lines of uFEM stuff)
+  + 1780 lines of Tcl code
+
+  - molitest updated to the new advanced library interface
+  - Tcl: invalid Macintosh type fixed
+
+
+### Wed Jul 19 23:50:19 CEST 2006
+
+  + more general interface for libraries (custom data init and clean)
+  + 4932 lines of code
+  + 1779 lines of Tcl code
+
+  - Tcl: "New" and "Open" now clean the dynamic library variable
+  - Tcl: some debug prints removed
+
+
+### Tue Jul 18 19:02:00 CEST 2006
+
+	+ Tcl: statistic data are shown near the histogram plot
+	
+	- fixes statistics output (more suitable for Tcl)
+
+	
+### Tue Jul 18 17:25:58 CEST 2006
+
+	- speedup of filling of output histograms
+	- fixed creation of distribution funcions
+	- fixed usage of continuous histograms
+
+
+### Mon Jul 17 22:44:00 CEST 2006
+
+  + custom rounding function (faster that default on IRIX)
+  + Tcl: the "New" function added to TCL code
+  + new example (from Marek's book)
+  + 4884 lines of C code (including examples)
+  + 1593 lines of Tcl/Tk code
+  
+  - Tcl: bad reading of o.h. intervals
+  - Tcl: orange/red button has now default colors
+  - Tcl: menu rearranged to be more eggonomic
+  - Tcl: selection of histogram can be now cancelled
+  - fixed reading of output histograms (limits and lenghts)
+
+
+### Mon Jul 17 16:41:42 CEST 2006
+
+  - multiplier to histogram added (previously forgotten)
+  - error in discrete histogram usage fixed (continous
+    are still faulty...)
+
+
+### Sun Jul 16 22:21:19 CEST 2006
+
+  + new library example added
+  + 4563 lines of C code
+  + first (hopefully working) version of GUI  (unix-only)
+    (in the Tcl/Tk - another 1526 lines of code)
+  + my uptime today: 12:30 :-(
+
+  - problems with histogram names followed by space solved
+  - default gnuplot-compatible output histograms no longer saved 
+
+  
+### Sat Jul 15 18:34:15 CEST 2006
+
+  + alternative library interface added (support for a parameter)
+  + tool for testing of shared libraries (and obtaining of data) added
+  + 4429 lines of code
+
+  - no longer crashes if no statistics file is requested
+  - help is now printed if no parameter is given (no longer shows
+    error message about incorrect number of simulation)
+
+
+### Fri Jul  7 02:29:34 CEST 2006
+
+  + updated and corrected, formally complete MPI version
+  + saving of output variables as histograms (more alternatives
+    added)
+  + tools for conversion of *.dis files to *.ps and *.png added
+  + computation of probability of failure (if requested)
+  + ports: Linux/OMAP (ARM)
+  + 3713 lines of code
+
+  - MPI version bugfixes (a huge number of fixes)
+  - reading of input data fixed
+
+  
+### Thu Jul  6 00:50:27 CEST 2006
+
+  - reading of *.dis files fixed (ignored "-" sign)
+
+
+### Wed Jul  5 20:12:13 CEST 2006
+
+  + saving of output variables to histogram files (*.dis
+    and gnuplot-compatible)
+  + 3084 lines of code
+
+  - numerous bugfixes in result histogram operations
+
+  
+### Wed Jul  5 00:44:07 CEST 2006
+
+  + functions for output of histograms (*.dis and Gnuplot-compatible)
+  + some basic stuff for future operations with result histograms
+  + 2832 lines of code
+
+  - fixed bad type for max, min in histogram structure (long->double)
+  - fixed errors when no output is specified
+
+
+### Mon Jul  3 22:30:07 CEST 2006
+
+  + MPI tested (requires that all processes can access to input data)
+  + ports: IRIX, Linux (x86, x86-64)
+  + 2109 lines of code
+
+  - Makefile fixed to work on Linux (-fPIC)
+  - fixed behaviour when solver library is not used
+  - several other minor bugs fixed
+
+
+### Sun Jul  2 23:01:14 CEST 2006
+
+  + partial implementation of MPI solution (untested
+    due to SPRNG compilation difficulties)
+  + 2081 lines of code
+
+  - fixed segfault if simulation output is not used
+  - fixed michmach in "-v" and "-nofrh" parameters
+  - some code cleanup and bugfixes
+
+
+### Sun Jul  2 00:09:58 CEST 2006
+
+  + first "public version"
+  + sequential code only
+  + constants and/or *.dis histograms can be used
+  + realizations of random variables can be computed
+  + user-defined solvers can be from shared libraries
+  + variable number of simulations
+  + SPRNG can be used (highly recomended)
+  + 1963 lines of code
+
+
+### Sun Dec  27 23:10:00 CEST 2005
+
+  + initial version (written in one day, untested)

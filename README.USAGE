@@ -1,0 +1,42 @@
+Input file:
+===========
+
+a) input variables:
+1. number_of_variables
+2. name_of_variable constant type [histogram_file]
+3. etc.
+
+Name_of_variable and histogram_file SHOULD NOT include spaces!
+
+Type:
+0 .. constant only
+1 .. histogram [intervals [min max]]
+
+For type=0 the histogram_file is irrelevant.
+
+b) output variables:
+1. number_of_variables
+2. name_of_variable result_type
+
+result_type should be:
+0. none
+1. automatic histogram with fixed borders (determined after first N simulations)
+2. automatic histogram with automatic borders 
+3. fixed-size histograms with fixed borders (determined after first N simulations)
+4. fixed-size histograms with automatic borders 
+5. fully determined histograms 
+6. fully determined histograms  with automatic borders
+
+Output files:
+=============
+
+a) statistic data:
+1. number_of_variables number_of_simulations
+2. minimum, maximum, average, dispersion, std_deviation, var_coefficient
+3. etc.
+
+
+b) simulations:
+1. number_of_variables number_of_simulations
+2. variable_1 variable_2 ... (for i-th simulation)
+3. etc.

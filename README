@@ -1,0 +1,7 @@
+Monte is a Monte Carlo simualtion tool for reliability assessment of
+building structures. It uses SPRNG random numbers generator library.
+
+It can load problem solvers (like finite elemnt solvers) on runtime
+as dynamic libraries.
+
+It is able to run in parallel (the the MPI is used).
