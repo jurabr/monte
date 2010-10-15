@@ -1,0 +1,19 @@
+#! /bin/sh
+
+# This script converts *.dis files to the PostScript ones.
+#
+# Usage ./dis2ps files
+#
+# requires the "dis2gp" tool to be in a current working directory
+# and (obviously) the to be "gnuplot" somewhere in $PATH
+#
+# (C) Jiri Brozovsky
+
+for aa in $@; do \
+echo "set term tkcanvas
+set output \"$aa.tk\"
+set grid 
+set key under
+set border 3
+plot \"-\" title \"$aa\" w l  
+`./dis2gp $aa`" |gnuplot ; done
