@@ -1,4 +1,4 @@
-#! /usr/bin/env wish
+#! /usr/bin/wish
 
 #
 # Simple GUI for Monte
