@@ -351,16 +351,16 @@ proc delete_i {} {
 }
 
 proc show_i_dis {} {
-  global hisname dis2tk
+  global hisname his_dir dis2tk 
 
   if {$hisname == ""} {
     tk_messageBox -icon error -type ok -message "Histogram file must be specified"
     return -1;
   } else {
-    exec $dis2tk $hisname
+    exec $dis2tk $his_dir/$hisname
     set name $hisname
     append name ".tk"
-    source  $name
+    source  $his_dir/$name
     gnuplot .sv.c
   }
 }
@@ -1228,7 +1228,7 @@ proc setLibArg {} {
 # executes solver:
 proc simRun {real_run} {
   global sim_number  sim_verbose sim_test  sim_wall  sim_savesim 
-  global monte_exe runmonte
+  global monte_exe runmonte his_dir
   global i_file_name o_stat_name o_sim_name  o_h_f i_library i_libarg
   global we_have_results
   global use_windowed_mode
@@ -1249,6 +1249,7 @@ proc simRun {real_run} {
   }
 
   # command:
+	append cmdline " -d $his_dir "
   append cmdline " -v "
 
   # input file:
@@ -1291,7 +1292,7 @@ proc simRun {real_run} {
 
   if {$real_run == 1} {
     #exec echo "$cmdline ; sleep 2" > $runmonte
-    exec xterm -title "Monte solver: $i_file_name" -e /bin/sh "$cmdline ; sleep 3"
+    exec xterm -title "Monte solver: $i_file_name" -e "$cmdline ; sleep 3"
   } 
 
   wm deiconify .
