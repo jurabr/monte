@@ -385,7 +385,7 @@ int alloc_empty_histogram(tHis *his, char *name, int type, int len, double min, 
 }
 
 /** TODO Allocates an empty histrogram structure 
- * @param newval - nev value that is outide histogram
+ * @param newval - nev value that is outside histogram
  * @return status
  */ 
 int enlarge_histogram(tHis *his, double newval)
