@@ -16,8 +16,8 @@ MLD=gcc -dynamiclib
 
 RNG=
 #RNG=-DUSE_SPRNG1 -DUSE_SPRNG -I/usr/include/sprng -I/opt/sprng/include -I../opt/sprng/include
-RNG=-DUSE_SPRNG2  -DUSE_SPRNG -I/opt/sprng/include # MPI code
-RNG=-DUSE_SPRNG2  -I/usr/include/sprng -DUSE_SPRNG
+#RNG=-DUSE_SPRNG2  -DUSE_SPRNG -I/opt/sprng/include # MPI code
+#RNG=-DUSE_SPRNG2  -I/usr/include/sprng -DUSE_SPRNG
 
 #DEBUG=-g -O0 -DDEVEL_VERBOSE
 DEBUG=-g -O0
@@ -27,8 +27,8 @@ CFLAGS=-Wall -ansi -pedantic -DREPLACE_RINTL -DUSE_LSHARED $(RNG) $(DEBUG) -DPSG
 
 RNG_LIBS=
 #RNG_LIBS=-L/opt/sprng/lib -L../opt/sprng/lib -llcg64
-RNG_LIBS=-L/opt/sprng/lib -lsprng #  MPI code
-RNG_LIBS=-lsprng
+#RNG_LIBS=-L/opt/sprng/lib -lsprng #  MPI code
+#RNG_LIBS=-lsprng
 
 LIBS=$(RNG_LIBS) -lm -ldl
 #LIBS=$(RNG_LIBS) -lgmp -lm -ldl

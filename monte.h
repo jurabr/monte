@@ -170,6 +170,12 @@ extern long    block_rand_init  ;
 
 extern long    rand_init ;
 
+/* Convergence tests: */
+extern double   ct_c     ;
+extern double   ct_t     ;
+extern double   ct_pd    ;
+extern int      ct_nmin  ;
+
 #ifdef USE_LSHARED
 /* dynamic library stuff */
 extern char   *dllib;

@@ -70,6 +70,13 @@ tVector corr_Y    ;        /* uncorrelated (input) */
 double  *cc_x  = NULL ;
 double  *cc_xy = NULL ;
 
+/* Convergence tests: */
+double   ct_c     = -1.0 ;
+double   ct_t     = -1.0 ;
+double   ct_pd    = 0.0 ;
+int      ct_nmin  = -1 ;
+
+/* Dynamic libraries */
 #ifdef USE_LSHARED
 char   *dllib      = NULL ; /* dynamic library name */
 void   *dlarg      = NULL ; /* argument for dynamic library */

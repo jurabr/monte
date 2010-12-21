@@ -187,6 +187,29 @@ void print_approx_exec_time(time_t t1, time_t t2, long dist, long all)
   }
 }
 
+/** Provides convergence testing */
+int monte_test_convergence(long simulation, long fail_num)
+{
+  double eps ;
+  double pf ;
+
+  eps = ct_t * sqrt( (ct_pd*(1.0-ct_pd)) /((double)simulation)) ;
+  pf  = ((double)fail_num) / ((double)simulation) ;
+
+  if (pf < (ct_pd - eps)) 
+  {
+    fprintf(msgout,"\n%s: %s %li %s\n",_("Finished"),_("Approximate solution converged in"),simulation, _("steps"));
+    return( 1);
+  }  /* done   */
+  if (pf > (ct_pd + eps)) 
+  {
+    fprintf(msgout,"\n%s: %s %li.\n",_("Finished"), _("Unconvergent solution in simulation"), simulation);
+    return(-1);
+  } /* failed */
+
+  return(0);
+}
+
 /** Does sequential Monte Carlo simulation process
  */ 
 int monte_MC(FILE *fstat, FILE *fsim, FILE *fcrm)
@@ -403,6 +426,19 @@ int monte_MC(FILE *fstat, FILE *fsim, FILE *fcrm)
         sum2[j] += pow(rfld[j],2) ;
       }
     }
+
+
+    /* convergence testing: */
+    if (ct_pd > 0.0) {
+      if (i >= (ct_nmin-1))
+      {
+        if ((monte_test_convergence(i+1,fail_num)) != 0)
+        {
+          sim_number = i+1 ;
+          break;
+        }
+      }
+    }
   }
 
   /* compute and save results */
@@ -512,7 +548,6 @@ int monte_MC(FILE *fstat, FILE *fsim, FILE *fcrm)
       cc_xy[i] = pp_sumxy[i] ; 
     }
   }
-
 #endif
 
   /* probability of failure */

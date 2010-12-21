@@ -54,6 +54,11 @@ void print_help(char *name)
   fprintf(msgout,"    %s .. %s\n", "-lda ARG  ",_("argument for loaded library (if any)"));
   fprintf(msgout,"    %s .. %s\n", "-ld LIB   ",_("load library LIB with solver"));
 #endif
+
+  fprintf(msgout,"    %s .. %s\n", "-ctp NUM  ",_("convergence test: designed probability of failure"));
+  fprintf(msgout,"    %s .. %s\n", "-ctc NUM  ",_("convergence test: theoretical reliability value"));
+  fprintf(msgout,"    %s .. %s\n", "-ctn NUM  ",_("convergence test: min. number of simulations"));
+
   fprintf(msgout,"    %s .. %s\n", "-noir     ",_("do not initialize randomizer (use for testing only!)"));
   fprintf(msgout,"    %s .. %s\n", "-v        ",_("enable verbose mode"));
   fprintf(msgout,"    %s .. %s\n", "-vn NUM   ",_("print notice after every NUM simulations"));
@@ -65,7 +70,7 @@ void print_help(char *name)
 void print_license(char *name)
 {
   fprintf(msgout,"\n %s\n", _("Simple Reliability Tool"));
-  fprintf(msgout," %s %s\n\n",_("(C) 2006"), _("Jiri Brozovsky, Petr Konecny, Jakub Valihrach"));
+  fprintf(msgout," %s %s\n\n",_("(C) 2006,2010"), _("Jiri Brozovsky, Petr Konecny, Jakub Valihrach"));
 
   fprintf(msgout,"  %s\n", _("This program is free software; you can redistribute it and/or"));
   fprintf(msgout,"  %s\n", _("modify it under the terms of the GNU General Public License as"));
@@ -143,6 +148,65 @@ long get_cmd_int(int argc, char *argv[], char *clswitch)
     }
   }
   
+  return(0);
+}
+
+double get_cmd_dbl(int argc, char *argv[], char *clswitch)
+{
+  long i ;
+  
+  for (i=1; i<argc; i++)
+  {
+    if (strcmp(argv[i],clswitch) == 0)
+    {
+      if (argc >= (i+2))
+      {
+        if (argv[i+1] != NULL)
+        {
+          return((atof(argv[i+1]))) ;
+        }
+      }
+    }
+  }
+  
+  return(0.0);
+}
+
+/** sets data for convergence testing */
+int set_ct_data(void)
+{
+  if (ct_c < 0.5) 
+  {
+    ct_c    = -1.0 ;
+    ct_nmin = -1 ;
+    return(0);
+  }
+  else
+  {
+    if (ct_c <= 0.9)
+    {
+      ct_c = 0.9 ;
+      ct_t = 1.644853476 ;
+    }
+    else
+    {
+      if (ct_c <= 0.99)
+      {
+        ct_c = 0.99 ;
+        ct_t = 2.575831338 ;
+      }
+      else
+      {
+         ct_c = 0.999 ;
+         ct_t = 3.890687140 ;
+      }
+    }
+  }
+
+  if (ct_nmin < 1)
+  {
+    ct_nmin = (long)(sim_number/10) ;
+  }
   return(0);
 }
 
@@ -302,6 +366,26 @@ int parse_command_line(int argc, char *argv[])
   {
     verbose_nums = 10000 ;
   }
+
+
+  if ((ct_pd = get_cmd_dbl(argc, argv, "-ctp")) <= 0.0)
+  {
+    ct_pd   = -1.0 ;
+    ct_c    = -1.0;
+    ct_nmin = -1 ;
+  }
+
+  if ((ct_c = get_cmd_dbl(argc, argv, "-ctc")) < 0.5)
+  {
+    ct_pd   = -1.0 ;
+    ct_c    = -1.0;
+    ct_nmin = -1 ;
+  }
+  if ((ct_nmin = get_cmd_int(argc, argv, "-ctn")) < 1)
+  {
+    ct_nmin = -1 ;
+  }
+
 
 #ifdef USE_LSHARED
 #ifndef USE_WIN32
@@ -529,6 +613,9 @@ int parse_command_line(int argc, char *argv[])
     use_cc_simple = 0 ;
     fprintf(msgout,"%s - %s!\n", _("Error"), _("result correlations are available only for more than 3 simulations"));
   }
+
+  /* set convergence testing data */
+  set_ct_data() ;
 
 #ifdef DEVEL_VERBOSE
   if (workdir != NULL) { fprintf(msgout, "[D] Working directory: %s\n", workdir); }
