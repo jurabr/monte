@@ -3,7 +3,7 @@
 #
 # Simple GUI for Monte
 #
-# (C) Jiri Brozovsky, 2006-2010
+# (C) Jiri Brozovsky, 2006
 #
 
 package require Tk
@@ -1292,7 +1292,7 @@ proc simRun {real_run} {
 
   if {$real_run == 1} {
     #exec echo "$cmdline ; sleep 2" > $runmonte
-    exec xterm -title "Monte solver: $i_file_name" -e /bin/sh "$cmdline ; sleep 3"
+    exec xterm -title "Monte solver: $i_file_name" -e "$cmdline ; sleep 3"
   } 
 
   wm deiconify .
@@ -1314,7 +1314,7 @@ proc simRun {real_run} {
 
 # "help About" dialog:
 proc helpAbout {} {
-  tk_messageBox -type ok -title "About" -message "Monte: Reliability Tool\n(C) 2006-2010: \nJiri Brozovsky, \nPetr Konecny, \nJakub Valihrach"
+  tk_messageBox -type ok -title "Ahout" -message "Monte: Reliability Tool\n(C) 2006: \nJiri Brozovsky, \nPetr Konecny, \nJakub Valihrach"
 }
 
 proc plot_result_hist {} {

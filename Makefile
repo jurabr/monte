@@ -1,12 +1,12 @@
 all: monte dis2gp molitest libs pearson
-libs: libsample.so libsample2.so libsample3.so 
+libs: libsample.so libsample2.so libsample3.so libfemcall.so
 maclibs: libsample.dylib libsample2.dylib libsample3.dylib
 
 CC=gcc
 MCC=gcc
 #MCC=mpicc -I/opt/lam/include -DUSE_MMPI -DUSE_MPI
 
-LD=ld -shared  -L/usr/local/lib #-lefence
+LD=ld -shared
 MLD=gcc -dynamiclib
 
 
@@ -16,37 +16,29 @@ MLD=gcc -dynamiclib
 
 RNG=
 #RNG=-DUSE_SPRNG1 -DUSE_SPRNG -I/usr/include/sprng -I/opt/sprng/include -I../opt/sprng/include
-#RNG=-DUSE_SPRNG2  -DUSE_SPRNG -I/opt/sprng/include # MPI code
-#RNG=-DUSE_SPRNG2  -I/usr/include/sprng -DUSE_SPRNG
+#RNG=-DUSE_SPRNG2  #-DUSE_SPRNG #-I/opt/sprng/include
+#RNG=-DUSE_SPRNG2  -I/usr/include/sprng -DUSE_SPRNG -I/opt/sprng/include
+#RNG=-DUSE_SPRNG2  -DUSE_SPRNG -I/opt/sprng/include
 
 #DEBUG=-g -O0 -DDEVEL_VERBOSE
-DEBUG=-g -O0
 DEBUG=-O3 
 
 CFLAGS=-Wall -ansi -pedantic -DREPLACE_RINTL -DUSE_LSHARED $(RNG) $(DEBUG) -DPSGUI 
 
 RNG_LIBS=
 #RNG_LIBS=-L/opt/sprng/lib -L../opt/sprng/lib -llcg64
-#RNG_LIBS=-L/opt/sprng/lib -lsprng #  MPI code
+#RNG_LIBS=-L/opt/sprng/lib -lsprng
 #RNG_LIBS=-lsprng
 
-LIBS=$(RNG_LIBS) -lm -ldl
-#LIBS=$(RNG_LIBS) -lgmp -lm -ldl
+LIBS=$(RNG_LIBS) -lgmp -lm -ldl
 #LIBS=$(RNG_LIBS) -L/opt/lam/lib -lmpi -lgmp -lm #-L/usr/local/lib -lefence
-
-# #############################################################
-# For MINGW: 
-#CC=/usr/bin/i586-mingw32msvc-gcc -DUSE_WIN32
-#MCC=/usr/bin/i586-mingw32msvc-gcc -DUSE_WIN32
-#LIBS=$(RNG_LIBS) -lm # for Win32
-# #############################################################
-
 
 OBJECTS=monte.o knuth.o hisops.o cparam.o finput.o simul.o mgraph.o mgfx_ps.o mpifunc.o fem_math.o fem_mem.o correl.o eqs.o
 LOBJECTS=lsample.o
 LOBJECTS2=lsample2.o
 LOBJECTS3=lsample3.o
 LOBJECTS4=lsample4.o
+LOBJECTS5=femcall.o
 
 monte: $(OBJECTS)
 	$(MCC) $(CFLAGS) -o $(@) $(OBJECTS) $(LIBS)
@@ -120,6 +112,9 @@ lsample3.o: lsample3.c
 lsample4.o: lsample4.c
 	$(CC) -c -fPIC -rdynamic lsample4.c $(CFLAGS)
 
+femcall.o: femcall.c
+	$(CC) -c -fPIC -rdynamic femcall.c $(CFLAGS)
+
 
 libsample.so: $(LOBJECTS)
 	$(LD) $(LOBJECTS) -o $(@)
@@ -132,6 +127,9 @@ libsample3.so: $(LOBJECTS3)
 
 libsample4.so: $(LOBJECTS4)
 	$(LD) $(LOBJECTS4) -o $(@)
+
+libfemcall.so: $(LOBJECTS5)
+	$(LD) $(LOBJECTS5) -o $(@)
 
 
 # Mac OS X (Darwin) shared libraries:
@@ -147,6 +145,9 @@ libsample3.dylib: $(LOBJECTS3)
 
 libsample4.dylib: $(LOBJECTS4)
 	$(MLD) $(LOBJECTS4) -o $(@)
+
+libfemcall.dylib: $(LOBJECTS5)
+	$(MLD) $(LOBJECTS5) -o $(@)
 
 
 clean:
