@@ -1,5 +1,5 @@
 all: monte dis2gp molitest libs pearson
-libs: libsample.so libsample2.so libsample3.so libfemcall.so
+libs: libsample.so libsample2.so libsample3.so
 maclibs: libsample.dylib libsample2.dylib libsample3.dylib
 
 CC=gcc
@@ -38,7 +38,6 @@ LOBJECTS=lsample.o
 LOBJECTS2=lsample2.o
 LOBJECTS3=lsample3.o
 LOBJECTS4=lsample4.o
-LOBJECTS5=femcall.o
 
 monte: $(OBJECTS)
 	$(MCC) $(CFLAGS) -o $(@) $(OBJECTS) $(LIBS)
@@ -112,9 +111,6 @@ lsample3.o: lsample3.c
 lsample4.o: lsample4.c
 	$(CC) -c -fPIC -rdynamic lsample4.c $(CFLAGS)
 
-femcall.o: femcall.c
-	$(CC) -c -fPIC -rdynamic femcall.c $(CFLAGS)
-
 
 libsample.so: $(LOBJECTS)
 	$(LD) $(LOBJECTS) -o $(@)
@@ -127,9 +123,6 @@ libsample3.so: $(LOBJECTS3)
 
 libsample4.so: $(LOBJECTS4)
 	$(LD) $(LOBJECTS4) -o $(@)
-
-libfemcall.so: $(LOBJECTS5)
-	$(LD) $(LOBJECTS5) -o $(@)
 
 
 # Mac OS X (Darwin) shared libraries:
