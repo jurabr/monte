@@ -804,7 +804,6 @@ proc write_input_file {} {
 
   # open file:
   if [ catch {set fr [open $i_file_name "w"]} result] {
-    #puts $result  
     tk_messageBox -icon error -type ok -message "Can not open file!"
     return -1 
   }
@@ -1232,6 +1231,7 @@ proc simRun {real_run} {
   global i_file_name o_stat_name o_sim_name  o_h_f i_library i_libarg
   global we_have_results
   global use_windowed_mode
+	global  sys_type
   
   clean_results 
   clean_canvas
@@ -1292,7 +1292,12 @@ proc simRun {real_run} {
 
   if {$real_run == 1} {
     #exec echo "$cmdline ; sleep 2" > $runmonte
-    exec xterm -title "Monte solver: $i_file_name" -e "$cmdline ; sleep 3"
+		if {$sys_type == "IRIX"} {
+			exec xterm -title "Monte solver: $i_file_name" -e /bin/sh "$cmdline ; sleep 3"
+		} else {
+    	exec xterm -title "Monte solver: $i_file_name" -e "$cmdline ; sleep 3"
+		}
+
   } 
 
   wm deiconify .
@@ -1314,7 +1319,8 @@ proc simRun {real_run} {
 
 # "help About" dialog:
 proc helpAbout {} {
-  tk_messageBox -type ok -title "Ahout" -message "Monte: Reliability Tool\n(C) 2006: \nJiri Brozovsky, \nPetr Konecny, \nJakub Valihrach"
+	tk_messageBox -type ok -title "About" -message "Monte: Reliability Tool\n(C) 2006-2010: \nJiri Brozovsky, \nPetr Konecny, \nJakub Valihrach"
+
 }
 
 proc plot_result_hist {} {
@@ -1867,5 +1873,11 @@ bind . <Control-q>  {exit}
 #tk_setPalette background lightgray foreground black
 #tk_setPalette background snow foreground black
 tk_setPalette background gray foreground black
+
+# sets type of execution:
+set sys_type "NORMAL"
+catch {set sys_type $env(SYS_TYPE)} {
+	set sys_type "NORMAL"
+}
 
 wm title . "Monte Reliability Research Tool"

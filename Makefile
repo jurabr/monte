@@ -9,7 +9,12 @@ MCC=gcc
 LD=ld -shared
 MLD=gcc -dynamiclib
 
+# For MINGW: 
+#CC=/usr/bin/i586-mingw32msvc-gcc -DUSE_WIN32
+#MCC=/usr/bin/i586-mingw32msvc-gcc -DUSE_WIN32
+#LIBS=$(RNG_LIBS) -lm # for Win32
 
+# For openwrt-xburst:
 #CC=/home/jirka/src/qi/openwrt-xburst/staging_dir/toolchain-mipsel_gcc-4.3.3+cs_uClibc-0.9.30.1/usr/bin/mipsel-openwrt-linux-uclibc-gcc
 #MCC=/home/jirka/src/qi/openwrt-xburst/staging_dir/toolchain-mipsel_gcc-4.3.3+cs_uClibc-0.9.30.1/usr/bin/mipsel-openwrt-linux-uclibc-gcc
 #LD=/home/jirka/src/qi/openwrt-xburst/staging_dir/toolchain-mipsel_gcc-4.3.3+cs_uClibc-0.9.30.1/usr/bin/mipsel-openwrt-linux-uclibc-ld -shared
