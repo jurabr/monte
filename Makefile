@@ -35,7 +35,8 @@ RNG_LIBS=
 #RNG_LIBS=-L/opt/sprng/lib -lsprng
 #RNG_LIBS=-lsprng
 
-LIBS=$(RNG_LIBS) -lgmp -lm -ldl
+LIBS=$(RNG_LIBS) -lm -ldl 
+#LIBS=$(RNG_LIBS) -lm -ldl -lgmp
 #LIBS=$(RNG_LIBS) -L/opt/lam/lib -lmpi -lgmp -lm #-L/usr/local/lib -lefence
 
 OBJECTS=monte.o knuth.o hisops.o cparam.o finput.o simul.o mgraph.o mgfx_ps.o mpifunc.o fem_math.o fem_mem.o correl.o eqs.o

@@ -1868,16 +1868,22 @@ bind . <Control-q>  {exit}
 
 # Initialization: ######################################################
 
-#tk_bisque
-#tk_setPalette background lightsteelblue foreground black
-#tk_setPalette background lightgray foreground black
-#tk_setPalette background snow foreground black
-tk_setPalette background gray foreground black
-
 # sets type of execution:
 set sys_type "NORMAL"
 catch {set sys_type $env(SYS_TYPE)} {
 	set sys_type "NORMAL"
 }
+
+# workaround for my home computer:
+if {$sys_type == "IRIX"} {
+  tk_setPalette background gray foreground black
+}
+
+#tk_bisque
+#tk_setPalette background lightsteelblue foreground black
+#tk_setPalette background lightgray foreground black
+#tk_setPalette background snow foreground black
+
+
 
 wm title . "Monte Reliability Research Tool"
