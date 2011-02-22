@@ -198,12 +198,16 @@ int monte_test_convergence(long simulation, long fail_num)
 
   if (pf < (ct_pd - eps)) 
   {
-    fprintf(msgout,"\n%s: %s %li %s\n",_("Finished"),_("Approximate solution converged in"),simulation, _("steps"));
+    if (verbose_mode == 1) {
+      fprintf(msgout,"\n%s: %s %li %s\n",_("Finished"),_("Approximate solution converged in"),simulation, _("steps"));
+    }
     return( 1);
   }  /* done   */
   if (pf > (ct_pd + eps)) 
   {
-    fprintf(msgout,"\n%s: %s %li.\n",_("Finished"), _("Unconvergent solution in simulation"), simulation);
+    if (verbose_mode == 1) {
+      fprintf(msgout,"\n%s: %s %li.\n",_("Finished"), _("Unconvergent solution in simulation"), simulation);
+    }
     return(-1);
   } /* failed */
 
