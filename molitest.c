@@ -184,6 +184,7 @@ int parse_command_line(int argc, char *argv[])
   }
 
 #ifdef USE_LSHARED
+#ifndef USE_WIN32
   dlarg = get_cmd_str(argc, argv, "-lda") ;
 
   if ((dllib = get_cmd_str(argc, argv, "-ld")) == NULL)
@@ -337,6 +338,77 @@ int parse_command_line(int argc, char *argv[])
       }
     }
   }
+#else  /* USE_WIN32 */
+	/* for windblows... */
+  dlarg = get_cmd_str(argc, argv, "-lda") ;
+
+  if ((dllib = get_cmd_str(argc, argv, "-ld")) == NULL)
+  {
+    res_solver = SOL_COPY ;
+  }
+  else
+  {
+    if ((int)(dlfile = LoadLibrary (dllib)) <= HINSTANCE_ERROR)
+    {
+      fprintf(msgout,"Error - unable to open dynamic library (%s)!\n", dllib);
+      free(dllib) ; dllib = NULL ;
+    	res_solver = SOL_COPY ;
+      return(-1);
+    }
+    else
+    {
+      monte_dlib_interface_type = (lpfunc)GetProcAddress(dlfile, "monte_dlib_interface_type");
+      {
+        switch(monte_dlib_interface_type())
+        {
+          case 1:
+            monte_solution = (ipfunc)GetProcAddress(dlfile, "monte_solution");
+            monte_nums_of_vars = (pfunc)GetProcAddress(dlfile, "monte_nums_of_vars");
+
+            monte_nums_of_vars(&num_ivars, &num_ovars, &ffunc_pos);
+
+            res_solver = SOL_LDL1 ;
+            break;
+
+          case 2:
+            monte_solution2 = (ipfunc)GetProcAddress(dlfile, "monte_solution");
+            monte_nums_of_vars2 = (pfunc)GetProcAddress(dlfile, "monte_nums_of_vars");
+            monte_init_lib_stuff2 = (ipfunc)GetProcAddress(dlfile, "monte_init_lib_stuff");
+ 
+            monte_clean_lib_stuff2 = (ipfunc)GetProcAddress(dlfile, "monte_clean_lib_stuff");
+
+            if (monte_init_lib_stuff2(dlarg) != 0) /* must be BEFORE nums_of_vars!*/
+            {
+              if (verbose_mode == 1) {fprintf(msgout,"%s - %s!\n", _("Error"), _("unable so initialize library data"));}
+              free(dllib) ; dllib = NULL ;
+              free(dlfile) ; dlfile = NULL ;
+    					res_solver = SOL_COPY ;
+              return(-1);
+            }
+
+            monte_nums_of_vars2(dlarg, &num_ivars, &num_ovars, &ffunc_pos);
+
+            if ((num_ivars < 1)||(num_ovars < 1))
+            {
+              if (verbose_mode ==1){fprintf(msgout,"%s - %s!\n",_("Error"), _("no variables declared in dynamic library"));}
+    					res_solver = SOL_COPY ;
+              return(-1);
+            }
+            res_solver = SOL_LDL2 ;
+            break;
+
+          default: 
+                  fprintf(msgout,"%s - %s!~\n", _("Error"), _("invalid dynamic library (unknown interface)"));
+                  free(dllib) ; dllib = NULL ;
+                  free(dlfile) ; dlfile = NULL ;
+    							res_solver = SOL_COPY ;
+                  return(-1);
+                  break;
+        }
+      }
+    }
+  }
+#endif /* USE_WIN32 */
 #endif
 
   if (get_cmd_single_par(argc, argv, "-d") == 1)
@@ -620,6 +692,11 @@ int main(int argc, char *argv[])
   {
     monte_clean_lib_stuff2(dlarg); /* clean library data (if any) */
   }
+
+#ifndef USE_WIN32
+  if (dlfile != NULL) { dlclose(dlfile); }
+#endif
+
 #endif
   return(0);
 }
