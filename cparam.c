@@ -51,8 +51,9 @@ void print_help(char *name)
   fprintf(msgout,"    %s .. %s\n", "-s NUM    ",_("number of simulations"));
   fprintf(msgout,"    %s .. %s\n", "-wall DAYS",_("maximum possible run time (in days)"));
 #ifdef USE_LSHARED
-  fprintf(msgout,"    %s .. %s\n", "-lda ARG  ",_("argument for loaded library (if any)"));
   fprintf(msgout,"    %s .. %s\n", "-ld LIB   ",_("load library LIB with solver"));
+  fprintf(msgout,"    %s .. %s\n", "-lda ARG  ",_("argument for loaded library (if any)"));
+  fprintf(msgout,"    %s .. %s\n", "-ldm NUM  ",_("mode parameter number for library (if any) "));
 #endif
 
   fprintf(msgout,"    %s .. %s\n", "-ctp NUM  ",_("convergence test: designed probability of failure"));
@@ -390,6 +391,7 @@ int parse_command_line(int argc, char *argv[])
 #ifdef USE_LSHARED
 #ifndef USE_WIN32
   dlarg = get_cmd_str(argc, argv, "-lda") ;
+  if_type = get_cmd_int(argc, argv, "-ldm") ;
 
   if ((dllib = get_cmd_str(argc, argv, "-ld")) == NULL)
   {

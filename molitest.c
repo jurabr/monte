@@ -25,6 +25,8 @@
 
 #include "monte.h"
 
+int if_mode = 0 ; /* for monte_solution2: work mode */
+
 #ifdef USE_LSHARED
 char *(*monte_ivar_name)(char *, long );
 char *(*monte_ovar_name)(char *, long );
@@ -32,7 +34,7 @@ int (*monte_solution)(double *, double *);
 void (*monte_nums_of_vars2)(char *, long *, long *, long *);
 int (*monte_init_lib_stuff2)(char *);
 int (*monte_clean_lib_stuff2)(char *);
-int (*monte_solution2)(char *,double *, double *);
+int (*monte_solution2)(char *,double *, double *, long);
 
 
 long output_type = -1 ;
@@ -50,6 +52,7 @@ void print_help(char *name)
 
   fprintf(msgout,"    %s .. %s\n", "-ld LIB   ",_("load library LIB with solver (required!)"));
   fprintf(msgout,"    %s .. %s\n", "-lda ARG  ",_("argument for loaded library (if any)"));
+  fprintf(msgout,"    %s .. %s\n", "-ldm NUM  ",_("mode parameter number for library (if any) "));
 
   fprintf(msgout,"    %s .. %s\n", "-o   FILE ",_("write output to FILE"));
   fprintf(msgout,"    %s .. %s\n", "-so       ",_("send all outputs to standard output"));
@@ -77,7 +80,7 @@ void print_help(char *name)
 void print_license(char *name)
 {
   fprintf(msgout,"\n %s\n", _("Simple Reliability Tool (sharet library analyzing utility)"));
-  fprintf(msgout," %s %s\n\n",_("(C) 2005"), _("Jiri Brozovsky, Petr Konecny, Jakub Valihrach"));
+  fprintf(msgout," %s %s\n\n",_("(C) 2005-2011"), _("Jiri Brozovsky, Petr Konecny, Jakub Valihrach"));
 
   fprintf(msgout,"  %s\n", _("This program is free software; you can redistribute it and/or"));
   fprintf(msgout,"  %s\n", _("modify it under the terms of the GNU General Public License as"));
@@ -186,6 +189,8 @@ int parse_command_line(int argc, char *argv[])
 #ifdef USE_LSHARED
 #ifndef USE_WIN32
   dlarg = get_cmd_str(argc, argv, "-lda") ;
+
+  if_mode = get_cmd_int(argc, argv, "-ldm") ;
 
   if ((dllib = get_cmd_str(argc, argv, "-ld")) == NULL)
   {
@@ -644,7 +649,7 @@ int get_output(void)
                 monte_solution(ifld, ofld);
                 break;
               case SOL_LDL2:
-                monte_solution2(dlarg, ifld, ofld);
+                monte_solution2(dlarg, ifld, ofld, if_mode);
                 break;
             }
 

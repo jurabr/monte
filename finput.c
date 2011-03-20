@@ -31,6 +31,7 @@ long    num_ivars  = 0 ;    /* number of input variables */
 long    num_ovars  = 0 ;    /* number of output variables */
 long    ffunc_pos  = -1 ;   /* position of failure function (if any) */
 long    fail_num   = 0 ;    /* used for computation of probability of failure */
+long    if_type    = 0 ;    /* work mode for monte_solution2 */
 long   *itype      = NULL ; /* input data types */
 tHis   *histogram  = NULL ; /* used histograms */
 double *multhis    = NULL ; /* histogram multiplier */

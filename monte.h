@@ -126,6 +126,7 @@ extern long    num_ivars  ; /* number of input variables */
 extern long    num_ovars  ; /* number of output variables */
 extern long    fail_num   ;    /* used for computation of probability of failure */
 extern long    ffunc_pos  ; /* position of failure function (if any) */
+extern long    if_type    ; /* work mode for monte_solution2 */
 extern long   *itype      ; /* input data types */
 extern tHis   *histogram  ; /* used histograms */
 extern double *multhis    ; /* histogram multiplier */
@@ -189,14 +190,14 @@ int (*monte_solution)(double *, double *);
 int (*monte_init_lib_stuff2)(char *);
 int (*monte_clean_lib_stuff2)(char *);
 void (*monte_nums_of_vars2)(char *, long *, long *, long *);
-int (*monte_solution2)(char *,double *, double *);
+int (*monte_solution2)(char *,double *, double *, long);
 #else
 extern HANDLE dlfile; 
 #define random rand
 #if 0
 #define EXPORT __declspec(dllimport)
 EXPORT int monte_solution(char *, double *, double *);
-EXPORT int monte_solution2(char *, double *, double *);
+EXPORT int monte_solution2(char *, double *, double *, long);
 EXPORT long monte_dlib_interface_type(void);
 EXPORT void monte_nums_of_vars(long *, long *, long *);
 EXPORT void monte_nums_of_vars2(long *, long *, long *);
