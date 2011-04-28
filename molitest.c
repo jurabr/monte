@@ -189,7 +189,6 @@ int parse_command_line(int argc, char *argv[])
 #ifdef USE_LSHARED
 #ifndef USE_WIN32
   dlarg = get_cmd_str(argc, argv, "-lda") ;
-
   if_mode = get_cmd_int(argc, argv, "-ldm") ;
 
   if ((dllib = get_cmd_str(argc, argv, "-ld")) == NULL)
@@ -249,7 +248,7 @@ int parse_command_line(int argc, char *argv[])
             monte_solution2 = dlsym(dlfile, "monte_solution");
             if (dlerror() != NULL)
             {
-              if (verbose_mode == 1) {fprintf(msgout,"%s - %s!\n", _("Error"), _("invalid dynamic library"));}
+              if (verbose_mode == 1) {fprintf(msgout,"%s - %s!\n", _("Error"), _("invalid dynamic library, no solver"));}
               free(dllib) ; dllib = NULL ;
               free(dlfile) ; dlfile = NULL ;
     					res_solver = SOL_COPY ;
@@ -258,7 +257,7 @@ int parse_command_line(int argc, char *argv[])
             monte_nums_of_vars2 = dlsym(dlfile, "monte_nums_of_vars");
             if (dlerror() != NULL)
             {
-              if (verbose_mode == 1) {fprintf(msgout,"%s - %s!\n", _("Error"), _("invalid dynamic library"));}
+              if (verbose_mode == 1) {fprintf(msgout,"%s - %s!\n", _("Error"), _("invalid dynamic library, no numbers"));}
               free(dllib) ; dllib = NULL ;
               free(dlfile) ; dlfile = NULL ;
     					res_solver = SOL_COPY ;
@@ -268,7 +267,7 @@ int parse_command_line(int argc, char *argv[])
             monte_ivar_name = dlsym(dlfile, "monte_ivar_name");
             if (dlerror() != NULL)
             {
-              if (verbose_mode == 1) {fprintf(msgout,"%s - %s!\n", _("Error"), _("invalid dynamic library"));}
+              if (verbose_mode == 1) {fprintf(msgout,"%s - %s!\n", _("Error"), _("invalid dynamic library, no ivar"));}
               free(dllib) ; dllib = NULL ;
               free(dlfile) ; dlfile = NULL ;
     					res_solver = SOL_COPY ;
@@ -278,18 +277,17 @@ int parse_command_line(int argc, char *argv[])
             monte_ovar_name = dlsym(dlfile, "monte_ovar_name");
             if (dlerror() != NULL)
             {
-              if (verbose_mode == 1) {fprintf(msgout,"%s - %s!\n", _("Error"), _("invalid dynamic library"));}
+              if (verbose_mode == 1) {fprintf(msgout,"%s - %s!\n", _("Error"), _("invalid dynamic library, no ovar"));}
               free(dllib) ; dllib = NULL ;
               free(dlfile) ; dlfile = NULL ;
     					res_solver = SOL_COPY ;
               return(-1);
             }
-
  
             monte_init_lib_stuff2 = dlsym(dlfile, "monte_init_lib_stuff");
             if (dlerror() != NULL)
             {
-              if (verbose_mode == 1) {fprintf(msgout,"%s - %s!\n", _("Error"), _("invalid dynamic library"));}
+              if (verbose_mode == 1) {fprintf(msgout,"%s - %s!\n", _("Error"), _("invalid dynamic library, no stuff init"));}
               free(dllib) ; dllib = NULL ;
               free(dlfile) ; dlfile = NULL ;
     					res_solver = SOL_COPY ;
@@ -299,7 +297,7 @@ int parse_command_line(int argc, char *argv[])
             monte_clean_lib_stuff2 = dlsym(dlfile, "monte_clean_lib_stuff");
             if (dlerror() != NULL)
             {
-              if (verbose_mode == 1) {fprintf(msgout,"%s - %s!\n", _("Error"), _("invalid dynamic library"));}
+              if (verbose_mode == 1) {fprintf(msgout,"%s - %s!\n", _("Error"), _("invalid dynamic library, no stuff clean"));}
               free(dllib) ; dllib = NULL ;
               free(dlfile) ; dlfile = NULL ;
     					res_solver = SOL_COPY ;
@@ -315,7 +313,6 @@ int parse_command_line(int argc, char *argv[])
     					res_solver = SOL_COPY ;
               return(-1);
             }
-
 
 
             monte_nums_of_vars2(dlarg, &num_ivars, &num_ovars, &ffunc_pos);
@@ -346,6 +343,7 @@ int parse_command_line(int argc, char *argv[])
 #else  /* USE_WIN32 */
 	/* for windblows... */
   dlarg = get_cmd_str(argc, argv, "-lda") ;
+  if_mode = get_cmd_int(argc, argv, "-ldm") ;
 
   if ((dllib = get_cmd_str(argc, argv, "-ld")) == NULL)
   {
