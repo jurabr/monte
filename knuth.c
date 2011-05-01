@@ -121,6 +121,7 @@ double get_rand(long *inpl)
 {
   switch (rand_gen_type)
   {
+    case 0: return(1.0); break ;
     case 1: return(get_rand_rand(inpl)); break ;
     case 2: return(get_rand_random(inpl)); break ;
     case 3: return(get_rand_knuth(inpl)); break ;

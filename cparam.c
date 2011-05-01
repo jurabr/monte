@@ -61,6 +61,7 @@ void print_help(char *name)
   fprintf(msgout,"    %s .. %s\n", "-ctn NUM  ",_("convergence test: min. number of simulations"));
 
   fprintf(msgout,"    %s .. %s\n", "-noir     ",_("do not initialize randomizer (use for testing only!)"));
+  fprintf(msgout,"    %s .. %s\n", "-norg     ",_("do not use random generator"));
   fprintf(msgout,"    %s .. %s\n", "-v        ",_("enable verbose mode"));
   fprintf(msgout,"    %s .. %s\n", "-vn NUM   ",_("print notice after every NUM simulations"));
   fprintf(msgout,"    %s .. %s\n", "-verr     ",_("write messages to STDERR instead of STDOUT"));
@@ -312,6 +313,12 @@ int parse_command_line(int argc, char *argv[])
   {
     block_rand_init = 1 ;
   }
+
+  if (get_cmd_single_par(argc, argv, "-norg") == 1)
+  {
+    rand_gen_type = 0 ;
+  }
+
 
   if ((sim_number = get_cmd_int(argc, argv, "-s")) <= 0)
   {

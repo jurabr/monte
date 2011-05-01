@@ -171,6 +171,8 @@ extern long    block_rand_init  ;
 
 extern long    rand_init ;
 
+extern int rand_gen_type ;
+
 /* Convergence tests: */
 extern double   ct_c     ;
 extern double   ct_t     ;

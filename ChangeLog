@@ -1,3 +1,8 @@
+### Sun May  1 20:17:18 CEST 2011
+
+  + Option "-norg" to disable random generator
+
+
 ### Tue Dec 21 19:44:23 CET 2010
 
   + Convergence testing (serial code only, from command line)
