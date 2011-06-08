@@ -1293,9 +1293,9 @@ proc simRun {real_run} {
   if {$real_run == 1} {
     #exec echo "$cmdline ; sleep 2" > $runmonte
 		if {$sys_type == "IRIX"} {
-			exec xterm -title "Monte solver: $i_file_name" -e /bin/sh "$cmdline ; sleep 3"
+			catch { exec xterm -title "Monte solver: $i_file_name" -e /bin/sh "$cmdline ; sleep 3" }
 		} else {
-    	exec xterm -title "Monte solver: $i_file_name" -e "$cmdline ; sleep 3"
+    	catch { exec xterm -title "Monte solver: $i_file_name" -e "$cmdline ; sleep 3" }
 		}
 
   } 
