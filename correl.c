@@ -297,7 +297,7 @@ int pack_val_corr(long num_corr, long *corr, long num_ifld, double *ifld, tVecto
 
   for (i=0; i<num_corr; i++)
   {
-    femVecPut(Y, pos, ifld[i]);
+    femVecPut(Y, pos, ifld[corr[i]]);
     pos++;
   }
   
@@ -325,7 +325,7 @@ int unpack_val_corr( tVector *X, long num_corr, long *corr, long num_ifld, doubl
 
   for (i=0; i<num_corr; i++)
   {
-    ifld[i] = femVecGet(X, pos);
+    ifld[corr[i]] = femVecGet(X, pos);
     pos++;
   }
  
