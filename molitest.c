@@ -556,13 +556,13 @@ int get_output(void)
 
       if (res_solver == SOL_LDL2)
       {
-        fprintf(fo, "\nInput variables: %li\n", res_solver);
+        fprintf(fo, "\nInput variables: %li\n", num_ivars);
         for (i=0; i<num_ivars; i++)
         {
           fprintf(fo,"%6li: %s\n", i, monte_ivar_name(dlarg, i));
         }
 
-        fprintf(fo, "\nOutput variables: %li\n", res_solver);
+        fprintf(fo, "\nOutput variables: %li\n", num_ovars);
         for (i=0; i<num_ovars; i++)
         {
           fprintf(fo,"%6li: %s\n", i, monte_ovar_name(dlarg, i));
