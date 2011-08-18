@@ -70,6 +70,14 @@ int do_simulation(double *rfld)
               if ((val >= i)||(val < 0)) { val = i ; }
               rfld[i] = rfld[val] ; /* constants CAN NOT be correlated */
               break ;
+      case DIS_DEPEND: /* dependent values CAN NOT be correlated */
+              val = deppos[i] ;
+              if ((val < i)&&(val >= 0)) 
+                 { rfld[i] =  multhis[i] * ( rfld[val]  / multhis[val] ) ; }
+							else
+							   { rfld[i] = multhis[i] ; }
+              break ;
+
     }
   }
   return(0);

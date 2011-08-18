@@ -74,6 +74,7 @@
 #define DIS_CONSTANT  0
 #define DIS_HISTOGR   1
 #define DIS_COPY      2
+#define DIS_DEPEND    3
 /* to be continued... */
 
 #define H_OUT_NONE         0
@@ -130,6 +131,7 @@ extern long    if_type    ; /* work mode for monte_solution2 */
 extern long   *itype      ; /* input data types */
 extern tHis   *histogram  ; /* used histograms */
 extern double *multhis    ; /* histogram multiplier */
+extern long   *deppos     ; /* dependence data (for DIS_DEPEND) */
 extern tDF    *distfunc   ; /* distribution functions */
 extern char   *inputfile  ; /* input file name */
 extern char   *workdir    ; /* working directory */

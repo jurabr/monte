@@ -1,3 +1,9 @@
+### Thu Aug 18 11:34:05 CEST 2011
+
++ version 0.0.6
++ new type of variable: functionally dependent
+
+
 ### Sun May  1 20:17:18 CEST 2011
 
   + Option "-norg" to disable random generator

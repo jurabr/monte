@@ -35,6 +35,7 @@ long    if_type    = 0 ;    /* work mode for monte_solution2 */
 long   *itype      = NULL ; /* input data types */
 tHis   *histogram  = NULL ; /* used histograms */
 double *multhis    = NULL ; /* histogram multiplier */
+long   *deppos     = NULL ; /* dependence data (for DIS_DEPEND) */
 tDF    *distfunc   = NULL ; /* distribution functions */
 char   *hisdir     = NULL ; /* directory with histograms */
 char   *workdir    = NULL ; /* working directory */
@@ -125,6 +126,7 @@ void null_input_flds(void)
   itype      = NULL ;
   histogram  = NULL ;
   multhis    = NULL ;
+  deppos     = NULL ;
   distfunc   = NULL ;
 }
 
@@ -133,6 +135,7 @@ void free_input_flds(void)
   free(itype      ) ;
   free(histogram  ) ;
   free(multhis    ) ;
+  free(deppos     ) ;
   free(distfunc   ) ;
 
   null_input_flds() ;
@@ -149,6 +152,9 @@ int alloc_input_flds(long len)
      { free_input_flds() ; return(-1); }
 
   if ((multhis = (double *)malloc(len*sizeof(double))) == NULL)
+     { free_input_flds() ; return(-1); }
+
+  if ((deppos = (long *)malloc(len*sizeof(long))) == NULL)
      { free_input_flds() ; return(-1); }
 
   if ((distfunc = (tDF *)malloc(len*sizeof(tDF))) == NULL)
@@ -845,6 +851,7 @@ int read_simple_input(FILE *fr)
 
     posa = posb ;
 
+		deppos[i] = -1 ;
     
     switch (itype[i])
     {
@@ -899,6 +906,26 @@ int read_simple_input(FILE *fr)
           goto memFree ;
         }
         break;
+
+      case DIS_DEPEND:
+        test_space(line, strlen(line), posa, &posb) ;
+ 				for (j=0; j<2*STR_LENGHT+1; j++) { tmp[j]='\0'; }
+    		for (j=posa; j<=posb; j++) { tmp[j-posa] = line[j] ; }
+    		tmp[posb+1] = '\0' ;
+    		deppos[i] = atoi(tmp) ;
+
+        /* var. index (0,1,..) is inside deppos[i] */
+        val = deppos[i] ;
+        if ((val >= i)||(val < 0)) 
+        { 
+          val = -1 ; 
+#ifdef DEVEL_VERBOSE
+          fprintf(msgout,"[D] Index of f-dependence is incorrect!\n");
+#endif
+          goto memFree ;
+        }
+        break;
+
       /* to be continued for other types.. */
     }
 
