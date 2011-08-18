@@ -878,6 +878,7 @@ int read_simple_input(FILE *fr)
 #endif
           goto memFree ;
         }
+				histogram[i].correlated = 0 ;
         if ( compute_pf(&histogram[i], &distfunc[i]) != 0)
         {
           goto memFree ;
@@ -1131,7 +1132,7 @@ int read_simple_input_correl(FILE *fr)
   /* no fget possible after this point !!! */
   fscanf(fr, "%li", &num_vals);
 
-  if (num_vals <= 0) /* noting to correlate*/
+  if (num_vals <= 0) /* nothing to correlate*/
   {
     corr_size = 0 ;
     return(0);
@@ -1153,7 +1154,7 @@ int read_simple_input_correl(FILE *fr)
   {
     fscanf(fr, "%li", &corr_desc[i]) ;
 
-		if (corr_desc[i] < num_ivars)
+		if ((corr_desc[i] < num_ivars) && (corr_desc[i] >= 0))
 		{
 			histogram[i].correlated = 1 ;
 		}

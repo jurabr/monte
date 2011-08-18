@@ -362,7 +362,7 @@ int compute_corr_tran_mat(tMatrix *cmat, tMatrix *tran)
 	{
 		for (j=1; j<=n; j++)
 		{
-printf("# %li %li\n",i, j);
+/*printf("# %li %li\n",i, j);*/
 			femMatPut(tran, i,j, femMatGet(cmat, i,j)) ;
 		}
 	}
