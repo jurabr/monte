@@ -42,6 +42,7 @@ extern long    res_solver ;
 extern long   *itype      ; /* input data types */
 extern tHis   *histogram  ; /* used histograms */
 extern double *multhis    ; /* histogram multiplier */
+extern long   *deppos     ; /* dependence data (for DIS_DEPEND) */
 extern tDF    *distfunc   ; /* distribution functions */
 
 extern double *pp_sum  ;
@@ -280,6 +281,7 @@ int mpi_send_input_data(void)
   MPI_Bcast(itype, num_ivars, MPI_LONG, 0, MPI_COMM_WORLD);
   MPI_Bcast(i_len, num_ivars, MPI_LONG, 0, MPI_COMM_WORLD);
   MPI_Bcast(i_total, num_ivars, MPI_LONG, 0, MPI_COMM_WORLD);
+  MPI_Bcast(deppos, num_ivars, MPI_LONG, 0, MPI_COMM_WORLD);
 
   MPI_Bcast(multhis, num_ivars, MPI_DOUBLE, 0, MPI_COMM_WORLD);
   MPI_Bcast(i_min, num_ivars, MPI_DOUBLE, 0, MPI_COMM_WORLD);
