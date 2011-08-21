@@ -820,8 +820,13 @@ proc write_input_file {} {
         if {[string compare [lindex $i_type $i] "hcopy"] == 0 } {
           set itype 2
         } else {
-          # "his"
-          set itype 1
+          if {[string compare [lindex $i_type $i] "hdep"] == 0 } {
+            # dependent
+            set itype 3
+          } else {
+            # "his"
+            set itype 1
+          }
         }
       }
       
@@ -942,8 +947,17 @@ proc read_input_file {} {
         set hname [lindex $line 3]
         set stype "his"
       } else {
-        set hname ""
-        set stype "const"
+        if {$type == 3} {
+          set hname [lindex $line 3]
+          set stype "hdep"
+        } else {
+          if {$type == 2} {
+            set stype "hcopy"
+          } else {
+            set stype "const"
+          }
+          set hname ""
+        }
       }
       lappend i_name $name
       lappend i_mult $mult
@@ -1067,7 +1081,7 @@ proc read_input_file {} {
   return 0;
 }
 
-# creates a epty file
+# creates an empty file
 proc fileNew {} {
   global we_have_results i_len o_len
   global i_mult i_type i_his i_name
@@ -1540,11 +1554,13 @@ label .iv.datype -text "Data type: "
 radiobutton .iv.constant -text "constant" -variable ivtype -value "const" -justify left
 radiobutton .iv.his -text "histogram" -variable ivtype -value "his" -justify left
 radiobutton .iv.copy -text "copy" -variable ivtype -value "hcopy" -justify left
+radiobutton .iv.hdep -text "dependent" -variable ivtype -value "hdep" -justify left
 
 grid .iv.datype -row 6 -column 0 -sticky w
 grid .iv.constant -row 6 -column 1 -columnspan 2 -sticky w
 grid .iv.his -row 7 -column 1 -columnspan 2 -sticky w
 grid .iv.copy -row 8 -column 1 -columnspan 2 -sticky w
+grid .iv.hdep -row 9 -column 1 -columnspan 2 -sticky w
 
 proc find_dis_name {} {
   global his_dir hisname ivtype
@@ -1582,19 +1598,19 @@ proc find_dis_name {} {
 
 # empty label (space):
 label .iv.empty3 -text ""
-grid .iv.empty3 -row 9 -column 0 -columnspan 3
+grid .iv.empty3 -row 10 -column 0 -columnspan 3
 
 
 # histogram file:
 label .iv.hisfl -text "Histogram: "
 label .iv.hname -textvariable hisname
 #button .iv.hsel -text "Select File" -command find_dis_name
-grid .iv.hisfl -row 10 -column 0 -sticky w
-grid .iv.hname -row 10 -column 1 -sticky w
+grid .iv.hisfl -row 11 -column 0 -sticky w
+grid .iv.hname -row 11 -column 1 -sticky w
 #grid .iv.hsel -row 10 -column 1 -sticky w
 
 frame .iv.hobox
-grid .iv.hobox -row 11 -column 1 -sticky w
+grid .iv.hobox -row 12 -column 1 -sticky w
 button .iv.hobox.sel -text "Select File" -command find_dis_name
 button .iv.hobox.show -text "View File" -command show_i_dis
 pack .iv.hobox.sel -side left
@@ -1602,11 +1618,11 @@ pack .iv.hobox.show -side left
 
 # empty label (space):
 label .iv.empty1 -text ""
-grid .iv.empty1 -row 12 -column 0 -columnspan 3
+grid .iv.empty1 -row 13 -column 0 -columnspan 3
 
 # New/Change/Delete buttons:
 frame .iv.but 
-grid .iv.but -row 13 -column 0 -columnspan 3
+grid .iv.but -row 14 -column 0 -columnspan 3
 
 button .iv.but.new   -text "New" -command "new_i"
 button .iv.but.apply -text "Change" -command "edit_i"
