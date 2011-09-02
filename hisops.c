@@ -84,11 +84,12 @@ int read_dis(FILE *fr, char *name, tHis *histogram)
   int bins, total, i ;
   double min, max ;
   char line[STR_LENGHT+1];
+  char bigline[STR_LENGHT*5+1];
   int  distrib = H_UNKNOWN ;
 
   /* Reading of variables */
   fgets(line, STR_LENGHT, fr);             /* [Description] */
-  fgets(line, STR_LENGHT, fr);             /* Identification... */
+  fgets(bigline, STR_LENGHT*5, fr);        /* Identification... (some idiots use very long text here) */
   fgets(line, STR_LENGHT, fr);             /* [Type... => distrib */
   
   if (strstr(line, "iscrete") != NULL)
