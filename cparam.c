@@ -528,6 +528,7 @@ int parse_command_line(int argc, char *argv[])
 #else  /* USE_WIN32 */
 	/* for windblows... */
   dlarg = get_cmd_str(argc, argv, "-lda") ;
+  if_type = get_cmd_int(argc, argv, "-ldm") ;
 
   if ((dllib = get_cmd_str(argc, argv, "-ld")) == NULL)
   {
