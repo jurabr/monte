@@ -865,24 +865,18 @@ int read_simple_input(FILE *fr)
         /* read histogram: */
         if (fnamecat(hisdir, hfile) == NULL) 
         { 
-#ifdef DEVEL_VERBOSE
-          fprintf(msgout,"[D] Error - fnamecat failed!\n");
-#endif
+          fprintf(msgout,"Error - fnamecat failed!\n");
           goto memFree ; 
         }
         strclean(hfile);
         if ((hfr=fopen(fnamecat(hisdir, hfile),"r"))==NULL) 
         { 
-#ifdef DEVEL_VERBOSE
-          fprintf(msgout,"[D] Error - cannot open histogram file: %s (\"%s\")\n",hfile,fnamecat(hisdir, hfile));
-#endif
+          fprintf(msgout,"Error - cannot open histogram file: %s (\"%s\")\n",hfile,fnamecat(hisdir, hfile));
           goto memFree ; 
         }
         if ( read_dis(hfr, name, &histogram[i]) != 0)
         {
-#ifdef DEVEL_VERBOSE
-          fprintf(msgout,"[D] Error - cannot read histogram: %s!\n",name);
-#endif
+          fprintf(msgout,"Error - cannot read histogram: %s!\n",name);
           goto memFree ;
         }
 				histogram[i].correlated = 0 ;
@@ -900,9 +894,7 @@ int read_simple_input(FILE *fr)
         if ((val >= i)||(val < 0)) 
         { 
           val = i ; 
-#ifdef DEVEL_VERBOSE
-          fprintf(msgout,"[D] Index of dependence is incorrect!\n");
-#endif
+          fprintf(msgout,"Error - index of dependence is incorrect!\n");
           goto memFree ;
         }
         break;
@@ -919,9 +911,7 @@ int read_simple_input(FILE *fr)
         if ((val >= i)||(val < 0)) 
         { 
           val = -1 ; 
-#ifdef DEVEL_VERBOSE
           fprintf(msgout,"[D] Index of f-dependence is incorrect!\n");
-#endif
           goto memFree ;
         }
         break;
