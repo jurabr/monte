@@ -35,7 +35,7 @@ RNG_LIBS=
 #RNG_LIBS=-L/opt/sprng/lib -lsprng
 #RNG_LIBS=-lsprng
 
-LIBS=$(RNG_LIBS) -lm #-ldl 
+LIBS=$(RNG_LIBS) -lm -ldl 
 #LIBS=$(RNG_LIBS) -lm #for mingw
 #LIBS=$(RNG_LIBS) -lm -ldl -lgmp
 #LIBS=$(RNG_LIBS) -L/opt/lam/lib -lmpi -lgmp -lm #-L/usr/local/lib -lefence
