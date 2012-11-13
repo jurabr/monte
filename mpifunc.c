@@ -230,6 +230,8 @@ int mpi_send_input_data(void)
   long i_main[5] ;
   long *i_len = NULL ;
   long *i_total = NULL ;
+  long *i_type  = NULL ;
+  long *i_correlated  = NULL ;
   double *i_min = NULL;
   double *i_max = NULL;
 
@@ -261,6 +263,8 @@ int mpi_send_input_data(void)
 
   if ((i_len=(long *)malloc(num_ivars*sizeof(long)))==NULL){return(-1);}
   if ((i_total=(long *)malloc(num_ivars*sizeof(long)))==NULL){return(-1);}
+  if ((i_type=(long *)malloc(num_ivars*sizeof(long)))==NULL){return(-1);}
+  if ((i_correlated=(long *)malloc(num_ivars*sizeof(long)))==NULL){return(-1);}
 
   if ((i_min=(double *)malloc(num_ivars*sizeof(double)))==NULL){return(-1);}
   if ((i_max=(double *)malloc(num_ivars*sizeof(double)))==NULL){return(-1);}
@@ -272,6 +276,9 @@ int mpi_send_input_data(void)
       i_len[i] = histogram[i].len ;
       i_total[i] = histogram[i].total ;
 
+      i_type[i] = histogram[i].type ;
+      i_correlated[i] = histogram[i].correlated ;
+
       i_min[i] = histogram[i].min ;
       i_max[i] = histogram[i].max ;
     }
@@ -282,6 +289,9 @@ int mpi_send_input_data(void)
   MPI_Bcast(i_len, num_ivars, MPI_LONG, 0, MPI_COMM_WORLD);
   MPI_Bcast(i_total, num_ivars, MPI_LONG, 0, MPI_COMM_WORLD);
   MPI_Bcast(deppos, num_ivars, MPI_LONG, 0, MPI_COMM_WORLD);
+
+  MPI_Bcast(i_type, num_ivars, MPI_LONG, 0, MPI_COMM_WORLD);
+  MPI_Bcast(i_correlated, num_ivars, MPI_LONG, 0, MPI_COMM_WORLD);
 
   MPI_Bcast(multhis, num_ivars, MPI_DOUBLE, 0, MPI_COMM_WORLD);
   MPI_Bcast(i_min, num_ivars, MPI_DOUBLE, 0, MPI_COMM_WORLD);
@@ -295,6 +305,9 @@ int mpi_send_input_data(void)
     {
       histogram[i].len = i_len[i] ;
       histogram[i].total = i_total[i] ;
+
+      histogram[i].type = i_type[i] ;
+      histogram[i].correlated = i_correlated[i] ;
 
       histogram[i].min = i_min[i] ;
       histogram[i].max = i_max[i] ;
@@ -326,7 +339,6 @@ int mpi_send_input_data(void)
 
   if (ppRank != 0)
   {
-
     for (i=0; i<num_ivars; i++)
     {
       switch(itype[i])

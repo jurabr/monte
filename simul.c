@@ -455,6 +455,7 @@ int monte_MC(FILE *fstat, FILE *fsim, FILE *fcrm)
 
   /* compute and save results */
 #ifdef USE_MMPI
+  if (ppRank == 0)
   mpi_alloc_rstats(num_ovars); /* no testing :-\ */
 
   MPI_Reduce(sum, pp_sum, num_ovars,MPI_DOUBLE,MPI_SUM,0,MPI_COMM_WORLD);
@@ -473,6 +474,7 @@ int monte_MC(FILE *fstat, FILE *fsim, FILE *fcrm)
     }
   }
 
+  if (ppRank == 0)
   mpi_free_rstats();
 
   
