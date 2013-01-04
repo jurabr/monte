@@ -877,8 +877,10 @@ int read_simple_input(FILE *fr)
         if ( read_dis(hfr, name, &histogram[i]) != 0)
         {
           fprintf(msgout,"Error - cannot read histogram: %s!\n",name);
+          fclose(hfr);
           goto memFree ;
         }
+        fclose(hfr);
 				histogram[i].correlated = 0 ;
         if ( compute_pf(&histogram[i], &distfunc[i]) != 0)
         {
