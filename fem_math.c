@@ -351,65 +351,13 @@ int femMatOut(tMatrix *a, FILE *fw)
 	return(rv);
 }
 
-#ifdef _USE_THREADS_
-void *thFemMatSetZero (void *param)
-{
-  tThData *p = (tThData*) param ;
-	long i;
-
-  if (p->to <= 0) {return(NULL);}
-
-	for (i=p->from; i<p->to; i++) 
-  { 
-    p->m_a->data[i] = 0.0 ; 
-  }
-
-  return(NULL);
-}
-#endif
 
 /** Sets all of matrix contents to 0 */
 void femMatSetZeroBig(tMatrix *a)
 {
 	long i;
-#ifdef _USE_THREADS_
-  /* threaded version */
-  tThData data[AF_MAX_THREADS];
-  pthread_t Thread_ID[AF_MAX_THREADS];
-  ldiv_t  dnum ;
 
-  if ((femUseThreads != AF_YES)||(a->len < femThreadMin)||(a->type != MAT_SPAR))
-  {
-	  for (i=0; i<a->len; i++) { a->data[i] = 0.0 ; }
-  }
-  else
-  {
-    dnum = ldiv(a->len, femThreadNum) ;
-    if (dnum.quot < 1)
-    {
-      dnum.quot = 0 ;
-      dnum.rem  = a->len ;
-    }
-
-    for (i=0; i<femThreadNum; i++)
-    {
-      data[i].m_a = a ;
-      data[i].from = i*dnum.quot ;
-
-      data[i].to = (i+1)*dnum.quot ;
-      if (i == (femThreadNum-1)) { data[i].to += dnum.rem ; }
-
-      pthread_create(&Thread_ID[i],NULL,thFemMatSetZero,&data[i]);
-    }
-
-    for (i=0; i<femThreadNum; i++)
-    {
-      pthread_join(Thread_ID[i], NULL) ;
-    }
-  }
-#else
 	for (i=0; i<a->len; i++) { a->data[i] = 0.0 ; }
-#endif
 }
 
 /** Sets all of matrix contents to 0 FOR SMALL DATA */
@@ -443,74 +391,14 @@ void femMatSetZeroRow(tMatrix *a, long row)
 	}
 }
 
-#ifdef _USE_THREADS_
-void *thFemMatSetZeroCol (void *param)
-{
-  tThData *p = (tThData*) param ;
-	long i;
-  long Col;
-
-  if (p->to <= 0) {return(NULL);}
-
-  Col = (long) p->n_a ;
-
-	for (i=p->from; i<p->to; i++) 
-  {
-    if (p->m_a->pos[i] == Col)
-    {
-      p->m_a->data[i] = 0.0;
-    }
-  }
-
-  return(NULL);
-}
-#endif
 
 /** Sets all of matrix contents to 0 */
 void femMatSetZeroCol(tMatrix *a, long Col)
 {
 	long i;
-#ifdef _USE_THREADS_
-  tThData data[AF_MAX_THREADS];
-  pthread_t Thread_ID[AF_MAX_THREADS];
-  ldiv_t  dnum ;
-#endif
 
 	if (a->type == MAT_SPAR)
 	{
-#ifdef _USE_THREADS_
-  if ((femUseThreads != AF_YES)||(a->len < femThreadMin))
-  {
-    for (i=0;i<a->len;i++){if(a->pos[i]==Col) {a->data[i]=0;}}
-  }
-  else
-  {
-    dnum = ldiv(a->len, femThreadNum) ;
-    if (dnum.quot < 1)
-    {
-      dnum.quot = 0 ;
-      dnum.rem  = a->len ;
-    }
-
-    for (i=0; i<femThreadNum; i++)
-    {
-      data[i].n_a = Col ;
-
-      data[i].m_a = a ;
-      data[i].from = i*dnum.quot ;
-
-      data[i].to = (i+1)*dnum.quot ;
-      if (i == (femThreadNum-1)) { data[i].to += dnum.rem ; }
-
-      pthread_create(&Thread_ID[i],NULL,thFemMatSetZeroCol,&data[i]);
-    }
-
-    for (i=0; i<femThreadNum; i++)
-    {
-      pthread_join(Thread_ID[i], NULL) ;
-    }
-  }
-#else
 		for (i=0; i<a->len; i++) 
 		{
 			if (a->pos[i] == Col)
@@ -518,7 +406,6 @@ void femMatSetZeroCol(tMatrix *a, long Col)
 				a->data[i] = 0 ;
 			}
 		}
-#endif
 	}
 	else
 	{
@@ -733,66 +620,11 @@ int femVecOut(tVector *a, FILE *fw)
 	return(rv);
 }
 
-#ifdef _USE_THREADS_
-void *thFemVecSetZero (void *param)
-{
-  tThData *p = (tThData*) param ;
-	long i;
-
-  if (p->to <= 0) {return(NULL);}
-
-	for (i=p->from; i<p->to; i++) 
-  { 
-    p->v_a->data[i] = 0.0 ; 
-  }
-
-  return(NULL);
-}
-#endif
-
-
 /** Sets all of vertor contents to 0 */
 void femVecSetZeroBig(tVector *a)
 {
 	long i;
-#ifdef _USE_THREADS_
-  /* threaded version */
-  tThData data[AF_MAX_THREADS];
-  pthread_t Thread_ID[AF_MAX_THREADS];
-  ldiv_t  dnum ;
-
-  if ((femUseThreads != AF_YES)||(a->len < femThreadMin))
-  {
-	  for (i=0; i<a->len; i++) { a->data[i] = 0.0 ; }
-  }
-  else
-  {
-    dnum = ldiv(a->len, femThreadNum) ;
-    if (dnum.quot < 1)
-    {
-      dnum.quot = 0 ;
-      dnum.rem  = a->len ;
-    }
-
-    for (i=0; i<femThreadNum; i++)
-    {
-      data[i].v_a = a ;
-      data[i].from = i*dnum.quot ;
-
-      data[i].to = (i+1)*dnum.quot ;
-      if (i == (femThreadNum-1)) { data[i].to += dnum.rem ; }
-
-      pthread_create(&Thread_ID[i],NULL,thFemVecSetZero,&data[i]);
-    }
-
-    for (i=0; i<femThreadNum; i++)
-    {
-      pthread_join(Thread_ID[i], NULL) ;
-    }
-  }
-#else
 	for (i=0; i<a->len; i++) { a->data[i] = 0.0 ; }
-#endif
 }
 
 /** Sets all of vertor contents to 0 FOR SMALL DATA */
@@ -819,31 +651,6 @@ int femVecClone(tVector *src, tVector *dest)
 
 /* ------------------    Matrix Operations    -------------------- */
 
-#ifdef _USE_THREADS_
-void *thFemVecVecMult (void *param)
-{
-  tThData *p = (tThData*) param ;
-	long i;
-	double mult = 0.0 ;
-
-	mult = 0.0 ;
-
-  if (p->to <= 0) 
-	{
-		p->n_a = 0.0 ;
-		return(NULL);
-	}
-
-  for (i=p->from; i<p->to; i++)
-	{
-		mult += p->v_a->data[i] * p->v_b->data[i] ;
-	}
-
-	p->n_a = mult ;
-	return(NULL);
-}
-#endif
-
 /** vector multiplication (scalar) (a[n]^t * b[n])
  * @param a vector
  * @param b vector
@@ -853,13 +660,6 @@ double femVecVecMultBig(tVector *a, tVector *b)
 {
 	long i;
 	static double mult;
-#ifdef _USE_THREADS_
-  tThData data1 ;
-  tThData data[AF_MAX_THREADS];
-  ldiv_t  dnum ;
-  pthread_t Thread_ID[AF_MAX_THREADS];
-  pthread_t Thread_1  ;
-#endif
 
 #ifdef DEVEL
 	if (a->rows != b->rows) { return(0); }
@@ -870,59 +670,10 @@ double femVecVecMultBig(tVector *a, tVector *b)
 
 	if ((a->type == VEC_FULL) && (b->type == VEC_FULL))
 	{
-#ifdef _USE_THREADS_
-      data1.v_a  = a ;
-      data1.v_b  = b ;
-      data1.from = 0; 
-      data1.to   = a->rows ;
-      data1.n_a  = 0.0 ;
-      
-      if ((femUseThreads != AF_YES)||(a->rows < femThreadMin))
-      {
-        pthread_create(&Thread_1,NULL,thFemVecVecMult,&data1);
-        pthread_join(Thread_1, NULL) ;
-				mult = data1.n_a ;
-      }
-      else
-      {
-        dnum = ldiv(a->rows, femThreadNum) ;
-        if (dnum.quot < 1)
-        {
-          dnum.quot = 0 ;
-          dnum.rem  = a->rows ;
-        }
-
-        for (i=0; i<femThreadNum; i++)
-        {
-          data[i].v_a  = a ;
-          data[i].v_b  = b ;
-          data[i].from = i*dnum.quot ;
-          data[i].to   = (i+1)*dnum.quot ;
-      		data[i].n_a  = 0.0 ;
-
-          if (i == (femThreadNum-1)) { data[i].to += dnum.rem ; }
-
-          pthread_create(&Thread_ID[i],NULL,thFemVecVecMult,&data[i]);
-        }
-
-        for (i=0; i<femThreadNum; i++)
-        {
-          pthread_join(Thread_ID[i], NULL) ;
-        }
-
-        mult = 0.0 ;
-
-        for (i=0; i<femThreadNum; i++)
-        {
-					mult += data[i].n_a ;
-        }
-      }
-#else
 		for (i=0; i<a->rows; i++)
 		{
 			mult += (a->data[i]*b->data[i]) ;
 		}
-#endif
 	}
 	else
 	{
@@ -1100,30 +851,6 @@ int femVecMatMult(tVector *a, tMatrix *b, tVector *c)
 	return(AF_OK);
 }
 
-#ifdef _USE_THREADS_
-void *thFemMatVecMult(void *param)
-{
-  tThData *p = (tThData*) param ;
-	long i,j;
-  double val = 0.0 ;
-
-  if (p->to <= 0) {return(NULL);}
-
-	for (i=p->from; i<p->to; i++)
-	{
-		val = 0.0;
-		for (j=p->m_a->frompos[i]; j<p->m_a->frompos[i]+p->m_a->defpos[i]; j++)
-		{
-			if (p->m_a->pos[j] <= 0) {break;} 
-			val +=  ( p->m_a->data[j] * p->v_b->data[p->m_a->pos[j]-1] ) ;
-	  }
-	  p->v_c->data[i] = val ;
-	}
-
-  return(NULL);
-}
-#endif
-
 /** Matrix by vector multiplication (a[m,n]*b[n] = b[n])
  * @param a matrix
  * @param b vector
@@ -1134,13 +861,6 @@ int femMatVecMultBig(tMatrix *a, tVector *b, tVector *c)
 {
 	long   i,j;
 	double val;
-#ifdef _USE_THREADS_
-  tThData data1 ;
-  tThData data[AF_MAX_THREADS];
-  ldiv_t  dnum ;
-  pthread_t Thread_ID[AF_MAX_THREADS];
-  pthread_t Thread_1  ;
-#endif
 
 	if ((a->cols != b->rows)||(c->rows != a->rows)) { return(AF_ERR_SIZ); }
 	if (c->type != VEC_FULL) {return(AF_ERR_VAL);}
@@ -1162,48 +882,6 @@ int femMatVecMultBig(tMatrix *a, tVector *b, tVector *c)
 		if ((a->type == MAT_SPAR) && (b->type == VEC_FULL))
 		{
 			femVecSetZero(c);
-#ifdef _USE_THREADS_
-      data1.m_a = a ;
-      data1.v_b = b ;
-      data1.v_c = c ;
-      data1.from = 0; 
-      data1.to = a->rows ;
-      
-      if ((femUseThreads != AF_YES)||(a->len < femThreadMin))
-      {
-        pthread_create(&Thread_1,NULL,thFemMatVecMult,&data1);
-        pthread_join(Thread_1, NULL) ;
-        return(AF_OK);
-      }
-      else
-      {
-        dnum = ldiv(a->rows, femThreadNum) ;
-        if (dnum.quot < 1)
-        {
-          dnum.quot = 0 ;
-          dnum.rem  = a->rows ;
-        }
-
-        for (i=0; i<femThreadNum; i++)
-        {
-          data[i].m_a = a ;
-          data[i].v_b = b ;
-          data[i].v_c = c ;
-
-          data[i].from = i*dnum.quot ;
-
-          data[i].to = (i+1)*dnum.quot ;
-          if (i == (femThreadNum-1)) { data[i].to += dnum.rem ; }
-
-          pthread_create(&Thread_ID[i],NULL,thFemMatVecMult,&data[i]);
-        }
-
-        for (i=0; i<femThreadNum; i++)
-        {
-          pthread_join(Thread_ID[i], NULL) ;
-        }
-      }
-#else
 			for (i=0; i<a->rows; i++)
 			{
 				val = 0.0;
@@ -1214,7 +892,6 @@ int femMatVecMultBig(tMatrix *a, tVector *b, tVector *c)
 				}
 				c->data[i] = val ;
 			}
-#endif
 		}
 		else
 		{
@@ -1448,40 +1125,6 @@ int femMatTran(tMatrix *a, tMatrix *b)
 	return(AF_OK);
 }
 
-#ifdef _USE_THREADS_
-void *thFemMatNorm (void *param)
-{
-  tThData *p = (tThData*) param ;
-	long i,j;
-	double Norm = 0.0 ;
-	double MaxNorm = 0.0 ;
-
-	Norm = 0.0 ;
-	MaxNorm = 0.0 ;
-
-  if (p->to <= 0) 
-	{
-		p->n_a = 0.0 ;
-		return(NULL);
-	}
-
-	for (i=p->from; i<p->to; i++)
-	{
-	  Norm = 0.0;
-		for (j= p->m_a->frompos[i]; j< (p->m_a->frompos[i]+p->m_a->defpos[i]); j++)
-		{
-			if (p->m_a->pos[j] <= 0) {break;}
-		  Norm += pow(p->m_a->data[j],2);
-		}
-		Norm = sqrt(Norm);
-		if (Norm > MaxNorm) {MaxNorm = Norm;}
-	}
-
-	p->n_a = MaxNorm ;
-	return(NULL);
-}
-#endif
-
 /** Computes norm of sparse matrix
  *  @param a matrix
  *  @return norm
@@ -1490,67 +1133,11 @@ double femMatNormBig(tMatrix *a)
 {
 	double Norm, MaxNorm,val;
 	long i,j;
-#ifdef _USE_THREADS_
-  tThData data1 ;
-  tThData data[AF_MAX_THREADS];
-  ldiv_t  dnum ;
-  pthread_t Thread_ID[AF_MAX_THREADS];
-  pthread_t Thread_1  ;
-#endif
 
 	MaxNorm = 0.0;
 
 	if (a->type == MAT_SPAR)
 	{
-#ifdef _USE_THREADS_
-      data1.m_a  = a ;
-      data1.from = 0; 
-      data1.to   = a->rows ;
-      data1.n_a  = 0.0 ;
-      
-      if ((femUseThreads != AF_YES)||(a->len < femThreadMin))
-      {
-        pthread_create(&Thread_1,NULL,thFemMatNorm,&data1);
-        pthread_join(Thread_1, NULL) ;
-				MaxNorm = data1.n_a ;
-      }
-      else
-      {
-        dnum = ldiv(a->rows, femThreadNum) ;
-        if (dnum.quot < 1)
-        {
-          dnum.quot = 0 ;
-          dnum.rem  = a->rows ;
-        }
-
-        for (i=0; i<femThreadNum; i++)
-        {
-          data[i].m_a  = a ;
-          data[i].from = i*dnum.quot ;
-          data[i].to   = (i+1)*dnum.quot ;
-      		data[i].n_a  = 0.0 ;
-
-          if (i == (femThreadNum-1)) { data[i].to += dnum.rem ; }
-
-          pthread_create(&Thread_ID[i],NULL,thFemMatNorm,&data[i]);
-        }
-
-        for (i=0; i<femThreadNum; i++)
-        {
-          pthread_join(Thread_ID[i], NULL) ;
-        }
-
-				MaxNorm = 0.0 ;
-
-        for (i=0; i<femThreadNum; i++)
-        {
-					if (data[i].n_a > MaxNorm)
-					{
-						MaxNorm = data[i].n_a ;
-					}
-        }
-      }
-#else
 		for (i=0; i<a->rows; i++)
 		{
 	  	Norm = 0.0;
@@ -1562,7 +1149,6 @@ double femMatNormBig(tMatrix *a)
 			Norm = sqrt(Norm);
 			if (Norm > MaxNorm) {MaxNorm = Norm;}
 		}
-#endif
 	}
 	else
 	{
@@ -1623,31 +1209,6 @@ double femMatNorm(tMatrix *a)
 	return(MaxNorm);
 }
 
-#ifdef _USE_THREADS_
-void *thFemVecNorm (void *param)
-{
-  tThData *p = (tThData*) param ;
-	long i;
-	double Norm = 0.0 ;
-
-	Norm = 0.0 ;
-
-  if (p->to <= 0) 
-	{
-		p->n_a = 0.0 ;
-		return(NULL);
-	}
-
-  for (i=p->from; i<p->to; i++)
-	{
-		Norm += pow(p->v_a->data[i],2);
-	}
-
-	p->n_a = Norm ;
-	return(NULL);
-}
-#endif
-
 /** Computes Euclide norm of vector sum(sqrt(a*a)) 
  *  @param a     vector
  *  @return norm
@@ -1656,69 +1217,15 @@ double femVecNormBig(tVector *a)
 {
 	double Norm, val;
 	int i;
-#ifdef _USE_THREADS_
-  tThData data1 ;
-  tThData data[AF_MAX_THREADS];
-  ldiv_t  dnum ;
-  pthread_t Thread_ID[AF_MAX_THREADS];
-  pthread_t Thread_1  ;
-#endif
 
 	Norm = 0.0;
 
 	if (a->type == VEC_FULL)
 	{
-#ifdef _USE_THREADS_
-      data1.v_a  = a ;
-      data1.from = 0; 
-      data1.to   = a->rows ;
-      data1.n_a  = 0.0 ;
-      
-      if ((femUseThreads != AF_YES)||(a->rows < femThreadMin))
-      {
-        pthread_create(&Thread_1,NULL,thFemVecNorm,&data1);
-        pthread_join(Thread_1, NULL) ;
-				Norm = data1.n_a ;
-      }
-      else
-      {
-        dnum = ldiv(a->rows, femThreadNum) ;
-        if (dnum.quot < 1)
-        {
-          dnum.quot = 0 ;
-          dnum.rem  = a->rows ;
-        }
-
-        for (i=0; i<femThreadNum; i++)
-        {
-          data[i].v_a  = a ;
-          data[i].from = i*dnum.quot ;
-          data[i].to   = (i+1)*dnum.quot ;
-      		data[i].n_a  = 0.0 ;
-
-          if (i == (femThreadNum-1)) { data[i].to += dnum.rem ; }
-
-          pthread_create(&Thread_ID[i],NULL,thFemVecNorm,&data[i]);
-        }
-
-        for (i=0; i<femThreadNum; i++)
-        {
-          pthread_join(Thread_ID[i], NULL) ;
-        }
-
-        Norm = 0.0 ;
-
-        for (i=0; i<femThreadNum; i++)
-        {
-					Norm += data[i].n_a ;
-        }
-      }
-#else
 		for (i=0; i<a->rows; i++)
 		{
 			Norm += (a->data[i]*a->data[i]) ;
 		}
-#endif
 	}
 	else
 	{

@@ -2,9 +2,15 @@ all: monte dis2gp molitest libs pearson
 libs: libsample.so libsample2.so libsample3.so
 maclibs: libsample.dylib libsample2.dylib libsample3.dylib
 
+ifeq ($(SYS_TYPE),IRIX)
+CC=/usr/nekoware/gcc-4.3/bin/gcc
+MCC=/usr/nekoware/gcc-4.3/bin/gcc
+#MCC=mpicc -I/opt/lam/include -DUSE_MMPI -DUSE_MPI
+else
 CC=gcc
 MCC=gcc
 #MCC=mpicc -I/opt/lam/include -DUSE_MMPI -DUSE_MPI
+endif
 
 LD=ld -shared
 MLD=gcc -dynamiclib
