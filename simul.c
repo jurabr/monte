@@ -115,6 +115,7 @@ int monte_transform(double *ifld, long ifld_len, double *ofld, long ofld_len)
       break;
 
     case SOL_LDL2:
+      if_type = 2 ;
       return( monte_solution2(dlarg, ifld, ofld, if_type) );
       break;
 
