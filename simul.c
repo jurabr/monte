@@ -115,7 +115,7 @@ int monte_transform(double *ifld, long ifld_len, double *ofld, long ofld_len)
       break;
 
     case SOL_LDL2:
-      if_type = 2 ;
+      if_type = 0 ; /* sets if_type for solver: 2=newmark, 1=price, 0=statics */
       return( monte_solution2(dlarg, ifld, ofld, if_type) );
       break;
 

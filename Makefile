@@ -3,8 +3,8 @@ libs: libsample.so libsample2.so libsample3.so
 maclibs: libsample.dylib libsample2.dylib libsample3.dylib
 
 ifeq ($(SYS_TYPE),IRIX)
-CC=/usr/nekoware/gcc-4.3/bin/gcc
-MCC=/usr/nekoware/gcc-4.3/bin/gcc
+CC=/usr/nekoware/gcc-4.7/bin/gcc
+MCC=/usr/nekoware/gcc-4.7/bin/gcc
 #MCC=mpicc -I/opt/lam/include -DUSE_MMPI -DUSE_MPI
 else
 CC=gcc
@@ -114,13 +114,13 @@ pearson: pearson.c
 # libraries:
 # 
 lsample.o: lsample.c
-	$(CC) -c -fPIC -rdynamic lsample.c $(CFLAGS)
+	$(CC) -c -fPIC lsample.c $(CFLAGS)
 
 lsample2.o: lsample2.c
-	$(CC) -c -fPIC -rdynamic lsample2.c $(CFLAGS)
+	$(CC) -c -fPIC lsample2.c $(CFLAGS)
 
 lsample3.o: lsample3.c
-	$(CC) -c -fPIC -rdynamic lsample3.c $(CFLAGS)
+	$(CC) -c -fPIC lsample3.c $(CFLAGS)
 
 lsample4.o: lsample4.c
 	$(CC) -c -fPIC -rdynamic lsample4.c $(CFLAGS)
