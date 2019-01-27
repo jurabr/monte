@@ -201,6 +201,7 @@ int parse_command_line(int argc, char *argv[])
     if ((dlfile = dlopen (dllib, RTLD_NOW)) == NULL)
     {
       fprintf(msgout,"Error - unable to open dynamic library (%s)!\n", dllib);
+      fprintf(msgout,"Error is: (%s)!\n", dlerror());
       free(dllib) ; dllib = NULL ;
     	res_solver = SOL_COPY ;
       return(-1);

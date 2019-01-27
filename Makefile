@@ -1,5 +1,5 @@
 all: monte dis2gp molitest libs pearson
-libs: libsample.so libsample2.so libsample3.so
+libs: libsample.so libsample2.so libsample3.so libsample4.so
 maclibs: libsample.dylib libsample2.dylib libsample3.dylib
 
 ifeq ($(SYS_TYPE),IRIX)
@@ -123,7 +123,7 @@ lsample3.o: lsample3.c
 	$(CC) -c -fPIC lsample3.c $(CFLAGS)
 
 lsample4.o: lsample4.c
-	$(CC) -c -fPIC -rdynamic lsample4.c $(CFLAGS)
+	$(CC) -c -fPIC lsample4.c $(CFLAGS)
 
 
 libsample.so: $(LOBJECTS)

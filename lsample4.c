@@ -53,7 +53,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-
 long monte_dlib_interface_type(void) 
 {
   return(1) ; /* 1 is for the simple type */
